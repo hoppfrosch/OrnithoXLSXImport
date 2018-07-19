@@ -1,0 +1,39 @@
+# This file contains metadata for your plugin. Since 
+# version 2.0 of QGIS this is the proper way to supply 
+# information about a plugin. The old method of 
+# embedding metadata in __init__.py will 
+# is no longer supported since version 2.0.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=OrnithoXLSXImport
+qgisMinimumVersion=3.0
+description=Importiert XLXS aus Ornitho.de in ein GeoPackage
+version=0.1
+author=Johannes Kilian
+email=hoppfrosch@gmx.de
+
+about=Importiert Daten von http://ornitho.de (XLSX-Format) in ein GeoPackage
+
+tracker=https://github.com/hoppfrosch/OrnithoXSLXImport/issues
+repository=https://github.com/hoppfrosch/OrnithoXSLXImporter
+# End of mandatory metadata
+
+# Recommended items:
+
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=python, ornithology, qgis, xlsx, geopackage
+
+homepage=https://github.com/hoppfrosch/OrnithoXSLXImporter/issues
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
