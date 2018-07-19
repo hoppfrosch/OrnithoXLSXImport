@@ -17,7 +17,7 @@ email=hoppfrosch@gmx.de
 about=Importiert Daten von http://ornitho.de (XLSX-Format) in ein GeoPackage
 
 tracker=https://github.com/hoppfrosch/OrnithoXSLXImport/issues
-repository=https://github.com/hoppfrosch/OrnithoXSLXImporter
+repository=https://github.com/hoppfrosch/OrnithoXSLXImport
 # End of mandatory metadata
 
 # Recommended items:
@@ -28,7 +28,7 @@ repository=https://github.com/hoppfrosch/OrnithoXSLXImporter
 # Tags are comma separated with spaces allowed
 tags=python, ornithology, qgis, xlsx, geopackage
 
-homepage=https://github.com/hoppfrosch/OrnithoXSLXImporter/issues
+homepage=https://github.com/hoppfrosch/OrnithoXSLXImport
 category=Plugins
 icon=icon.png
 # experimental flag
