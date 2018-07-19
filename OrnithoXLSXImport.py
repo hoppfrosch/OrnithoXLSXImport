@@ -32,7 +32,7 @@ from .OrnithoXLSXImport_dialog import OrnithoXLSXImportDialog
 import os.path
 
 
-__version__ = "0.1.0alpha001"
+__version__ = "0.1.0alpha002"
 
 
 class OrnithoXLSXImport:
@@ -165,7 +165,7 @@ class OrnithoXLSXImport:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/OrnithoXLSXImport/icon.png'
+        icon_path = ':/plugins/Ornitho_XLSX_Importer/res/goose.svg'
         self.add_action(
             icon_path,
             text=self.tr(u'OrnithoXLSXImport'),
