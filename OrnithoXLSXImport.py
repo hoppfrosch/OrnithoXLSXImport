@@ -27,12 +27,12 @@ from PyQt5.QtWidgets import QAction
 
 # Initialize Qt resources from file resources.py
 from .resources import *
-# Import the code for the dialog
-from .OrnithoXLSXImport_dialog import OrnithoXLSXImportDialog
+# Import the code for the Wizard
+from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
 import os.path
 
 
-__version__ = "0.1.0alpha002"
+__version__ = "0.1.0alpha003"
 
 
 class OrnithoXLSXImport:
@@ -64,8 +64,8 @@ class OrnithoXLSXImport:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
-        # Create the dialog (after translation) and keep reference
-        self.dlg = OrnithoXLSXImportDialog()
+        # Create the Wizard (after translation) and keep reference
+        self.wiz = OrnithoXLSXImportWizard()
 
         # Declare instance attributes
         self.actions = []
@@ -184,10 +184,10 @@ class OrnithoXLSXImport:
 
     def run(self):
         """Run method that performs all the real work"""
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
+        # show the Wizard
+        self.wiz.show()
+        # Run the Wizard event loop
+        result = self.wiz.exec_()
         # See if OK was pressed
         if result:
             # Do something useful here - delete the line containing pass and

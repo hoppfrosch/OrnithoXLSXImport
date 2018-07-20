@@ -28,13 +28,13 @@ from PyQt5 import uic
 from PyQt5 import QtWidgets
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'OrnithoXLSXImport_dialog_base.ui'))
+    os.path.dirname(__file__), 'OrnithoXLSXImport_wizard_base.ui'))
 
 
-class OrnithoXLSXImportDialog(QtWidgets.QDialog, FORM_CLASS):
+class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
-        super(OrnithoXLSXImportDialog, self).__init__(parent)
+        super(OrnithoXLSXImportWizard, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
