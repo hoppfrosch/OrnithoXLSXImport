@@ -6,15 +6,199 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>667</width>
+    <height>319</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Wizard</string>
+   <string>Import Ornitho-XLSX into GPKG</string>
   </property>
-  <widget class="QWizardPage" name="wizardPage1"/>
-  <widget class="QWizardPage" name="wizardPage2"/>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ClassicStyle</enum>
+  </property>
+  <property name="options">
+   <set>QWizard::CancelButtonOnLeft|QWizard::DisabledBackButtonOnLastPage|QWizard::HelpButtonOnRight</set>
+  </property>
+  <widget class="QWizardPage" name="wizardPageXSLX">
+   <property name="title">
+    <string>Auswahl der zu importierenden XLSX-Datei</string>
+   </property>
+   <property name="subTitle">
+    <string>Wählen Sie die zu importierende Ornitho-Exportdatei aus (XSLX-Format)</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">1</string>
+   </attribute>
+   <widget class="QGroupBox" name="groupBoxXLSXFile">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>641</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Zu importierende XLSX-Datei aus Ornitho</string>
+    </property>
+    <widget class="QLineEdit" name="lineEditXLSXFile">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>561</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="toolButtonXSLXFile">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>30</y>
+       <width>25</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWizardPage" name="wizardPageGeopackage">
+   <property name="title">
+    <string>Auswahl der zu exportierenden GeoPackage-Datei</string>
+   </property>
+   <property name="subTitle">
+    <string>Wählen sie die zu exportierende Geopackage-Datei aus.</string>
+   </property>
+   <widget class="QGroupBox" name="groupBoxGeopackageFile">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>641</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Zu exportierende GeoPackage-Datei</string>
+    </property>
+    <widget class="QLineEdit" name="lineEditGeopackageFile">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>581</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="toolButtonGeopackageFile">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>30</y>
+       <width>25</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWizardPage" name="wizardPageGeopackageCheck"/>
+  <widget class="QWizardPage" name="wizardPageLayername">
+   <property name="title">
+    <string>Auswahl des Layernamens in der GeoPackage-Datei</string>
+   </property>
+   <property name="subTitle">
+    <string>Wählen sie den Layer innerhalb der Geopackage-Datei aus.</string>
+   </property>
+   <widget class="QGroupBox" name="groupBoxGeopackageLayer">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>50</y>
+      <width>641</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Layername in der Geopackage-Datei</string>
+    </property>
+    <widget class="QComboBox" name="comboBoxGeopackageLayer">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>621</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="labelGeopackageFileTitle">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Geopackage-Datei:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelGeopackageFileName">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>601</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWizardPage" name="wizardPageLayernameCheck"/>
+  <widget class="QWizardPage" name="wizardPageImport">
+   <property name="title">
+    <string>Importvorgang</string>
+   </property>
+   <property name="subTitle">
+    <string>Informationen zum Importvorgang</string>
+   </property>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>621</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>
