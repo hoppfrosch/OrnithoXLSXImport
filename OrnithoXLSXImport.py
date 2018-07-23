@@ -23,7 +23,7 @@
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QAction, QWizard, QWizardPage, QLineEdit
+from PyQt5.QtWidgets import QAction, QWizard, QWizardPage, QLineEdit, QToolButton, QFileDialog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -31,7 +31,7 @@ from .resources import *
 from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
 import os.path
 
-__version__ = "0.1.0alpha004"
+__version__ = "0.1.0alpha005"
 
 
 class OrnithoXLSXImport:
@@ -68,6 +68,11 @@ class OrnithoXLSXImport:
 
         # Create the Wizard (after translation) and keep reference
         self.wiz = OrnithoXLSXImportWizard()
+
+        # Setup the signals
+        self.wiz.wizardPageXSLX.findChild(
+            QToolButton, "toolButtonXSLXFile").clicked.connect(
+            self.toolButtonXSLXFile)
 
         # Declare instance attributes
         self.actions = []
@@ -226,3 +231,17 @@ class OrnithoXLSXImport:
         s.remove("OrnithoXLSXImport/fileXLSX")
         # s.remove("OrnithoXLSXImport/fileGPKG")
         # s.remove("OrnithoXLSXImport/layerGPKG")
+
+    def toolButtonXSLXFile(self):
+        """Select the XLSX-File to be imported"""
+        # try:
+        filename = QFileDialog.getOpenFileName(
+            None, 'Waehle XLXS-Export Datei aus Ornitho:', self.fileXLSX, "Excel-File (*.xlsx)")
+        self.fileXLSX = filename[0]
+        if self.fileXLSX == "":
+            return
+       # Fill in the predefine values
+        self.wiz.wizardPageXSLX.findChild(
+            QLineEdit, "lineEditXLSXFile").setText(self.fileXLSX)
+
+        self.storeSettings()
