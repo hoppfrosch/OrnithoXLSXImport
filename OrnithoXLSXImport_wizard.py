@@ -22,18 +22,36 @@
  ***************************************************************************/
 """
 
+
 import os
 
 from PyQt5 import uic
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QWizard, QWizardPage, QLineEdit, QToolButton, QFileDialog
+from PyQt5 import QtGui
+from PyQt5.QtGui import QIcon, QPixmap, QPaintEvent
+
+from PyQt5.QtCore import QSettings
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'OrnithoXLSXImport_wizard_base.ui'))
 
 
+def dump(obj):
+    for attr in dir(obj):
+        if hasattr(obj, attr):
+            print("obj.%s = %s" % (attr, getattr(obj, attr)))
+
+
 class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
+
+        # Read the settings
+        self.clearSettings()
+        self.readSettings()
+        self.NextButtonEnabled = False
+
         super(OrnithoXLSXImportWizard, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
@@ -41,3 +59,79 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+
+        # dump(self)
+
+        # Set initial values
+        # Fill in the predefine values
+        self.wizardPageXSLX.findChild(
+            QLineEdit, "lineEditXLSXFile").setText(self.fileXLSX)
+
+        # Set up the signals
+        tb = self.wizardPageXSLX.findChild(QToolButton, "toolButtonXSLXFile")
+        tb.clicked.connect(self.clickedToolButtonXSLXFile)
+
+    def paintEvent(self, event):
+        """Event fuer Neuzeichnen des Wizards"""
+        id = self.currentId()
+        # https://python-forum.io/Thread-Disable-Enter-Key-PyQt5-Wizard?pid=51388
+        if id == 0:
+            self.validateXLSXFile()
+
+        self.button(QWizard.NextButton).setEnabled(self.NextButtonEnabled)
+        super(OrnithoXLSXImportWizard, self).paintEvent(event)
+
+    def showEvent(self, event):
+        """Show-Event"""
+        self.button(QWizard.NextButton).setDefault(False)
+        super(OrnithoXLSXImportWizard, self).showEvent(event)
+
+    def clickedToolButtonXSLXFile(self):
+        """Select the XLSX-File to be imported"""
+
+        filename = QFileDialog.getOpenFileName(
+            None, 'Waehle XLXS-Export Datei aus Ornitho:', self.fileXLSX, "Excel-File (*.xlsx)")
+        self.fileXLSX = filename[0]
+        if self.fileXLSX == "":
+            return
+        # Fill in the lineEdit containing filename
+        self.wizardPageXSLX.findChild(
+            QLineEdit, "lineEditXLSXFile").setText(self.fileXLSX)
+
+    def validateXLSXFile(self):
+        """Validierung des ausgewaehlten XLSX-Files"""
+        self.NextButtonEnabled = False
+
+        if os.path.exists(self.fileXLSX):
+            if os.path.isfile(self.fileXLSX):
+                self.NextButtonEnabled = True
+
+        # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
+
+        return False
+
+    def storeSettings(self):
+        """Store the settings into global QGIS-Settings"""
+        s = QSettings()
+        s.setValue("OrnithoXLSXImport/fileXLSX", self.fileXLSX)
+    #    s.setValue("OrnithoXLSXImport/fileGPKG", self.fileGPKG)
+    #    s.setValue("OrnithoXLSXImport/layerGPKG", self.layerGPKG)
+
+    def readSettings(self):
+        """Restore the settings from global QGIS-Settings"""
+        defaultPath = os.path.join(os.path.join(os.path.expanduser('~')))
+        defaultXLSX = os.path.join(defaultPath, "export.xlsx")
+    #    defaultGPKG = os.path.join(defaultPath, "ornitho.gpkg")
+    #    defaultLayerGPKG = os.path.splitext(os.path.basename(defaultXLSX))[0]
+
+        s = QSettings()
+        self.fileXLSX = s.value("OrnithoXLSXImport/fileXLSX", defaultXLSX)
+    #    self.fileGPKG = s.value("OrnithoXLSXImport/fileGPKG", defaultGPKG)
+    #    self.layerGPKG = s.value("OrnithoXLSXImport/layerGPKG", defaultLayerGPKG)
+
+    def clearSettings(self):
+        """Delete the settings from global QGIS-Settings"""
+        s = QSettings()
+        s.remove("OrnithoXLSXImport/fileXLSX")
+        # s.remove("OrnithoXLSXImport/fileGPKG")
+        # s.remove("OrnithoXLSXImport/layerGPKG")
