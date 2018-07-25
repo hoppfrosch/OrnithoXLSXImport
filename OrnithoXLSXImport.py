@@ -22,8 +22,8 @@
  ***************************************************************************/
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtGui import QIcon, QPixmap, QShowEvent
+from PyQt5.QtWidgets import QAction, QWizard, QLineEdit
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -31,8 +31,7 @@ from .resources import *
 from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
 import os.path
 
-
-__version__ = "0.1.0alpha003"
+__version__ = "0.1.0alpha006"
 
 
 class OrnithoXLSXImport:
@@ -82,8 +81,7 @@ class OrnithoXLSXImport:
 
         :param message: String for translation.
         :type message: str, QString
-
-        :returns: Translated version of message.
+:returns: Translated version of message.
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
@@ -165,7 +163,7 @@ class OrnithoXLSXImport:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/Ornitho_XLSX_Importer/res/goose.svg'
+        icon_path = ':/plugins/OrnithoXLSXImport/res/goose.png'
         self.add_action(
             icon_path,
             text=self.tr(u'OrnithoXLSXImport'),
@@ -178,6 +176,7 @@ class OrnithoXLSXImport:
             self.iface.removePluginMenu(
                 self.tr(u'&OrnithoXLSXImport'),
                 action)
+
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
         del self.toolbar
