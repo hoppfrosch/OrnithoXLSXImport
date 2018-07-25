@@ -66,10 +66,15 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         # Fill in the predefine values
         self.wizardPageXSLX.findChild(
             QLineEdit, "lineEditXLSXFile").setText(self.fileXLSX)
+        self.wizardPageGeopackage.findChild(
+            QLineEdit, "lineEditGeopackageFile").setText(self.fileGPKG)
 
         # Set up the signals
         tb = self.wizardPageXSLX.findChild(QToolButton, "toolButtonXSLXFile")
         tb.clicked.connect(self.clickedToolButtonXSLXFile)
+        tb = self.wizardPageGeopackage.findChild(
+            QToolButton, "toolButtonGeopackageFile")
+        tb.clicked.connect(self.clickedToolButtonGeopackageFile)
 
     def paintEvent(self, event):
         """Event fuer Neuzeichnen des Wizards"""
@@ -77,6 +82,8 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         # https://python-forum.io/Thread-Disable-Enter-Key-PyQt5-Wizard?pid=51388
         if id == 0:
             self.validateXLSXFile()
+        elif id == 1:
+            self.validateGPKGFile()
 
         self.button(QWizard.NextButton).setEnabled(self.NextButtonEnabled)
         super(OrnithoXLSXImportWizard, self).paintEvent(event)
@@ -98,6 +105,18 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         self.wizardPageXSLX.findChild(
             QLineEdit, "lineEditXLSXFile").setText(self.fileXLSX)
 
+    def clickedToolButtonGeopackageFile(self):
+        """Select the Geopackage-File to be exported"""
+
+        filename = QFileDialog.getSaveFileName(
+            None, 'Waehle zu exportierende Geopackage-Datei:', self.fileGPKG, "Geopackage-File (*.gpkg)")
+        self.fileGPKG = filename[0]
+        if self.fileGPKG == "":
+            return
+        # Fill in the lineEdit containing filename
+        self.wizardPageGeopackage.findChild(
+            QLineEdit, "lineEditGeopackageFile").setText(self.fileGPKG)
+
     def validateXLSXFile(self):
         """Validierung des ausgewaehlten XLSX-Files"""
         self.NextButtonEnabled = False
@@ -105,6 +124,17 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         if os.path.exists(self.fileXLSX):
             if os.path.isfile(self.fileXLSX):
                 self.NextButtonEnabled = True
+
+        # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
+
+        return False
+
+    def validateGPKGFile(self):
+        """Validierung des ausgewaehlten XLSX-Files"""
+        self.NextButtonEnabled = False
+
+        if not os.path.exists(self.fileGPKG):
+            self.NextButtonEnabled = True
 
         # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
 
@@ -121,17 +151,17 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         """Restore the settings from global QGIS-Settings"""
         defaultPath = os.path.join(os.path.join(os.path.expanduser('~')))
         defaultXLSX = os.path.join(defaultPath, "export.xlsx")
-    #    defaultGPKG = os.path.join(defaultPath, "ornitho.gpkg")
+        defaultGPKG = os.path.join(defaultPath, "ornitho.gpkg")
     #    defaultLayerGPKG = os.path.splitext(os.path.basename(defaultXLSX))[0]
 
         s = QSettings()
         self.fileXLSX = s.value("OrnithoXLSXImport/fileXLSX", defaultXLSX)
-    #    self.fileGPKG = s.value("OrnithoXLSXImport/fileGPKG", defaultGPKG)
+        self.fileGPKG = s.value("OrnithoXLSXImport/fileGPKG", defaultGPKG)
     #    self.layerGPKG = s.value("OrnithoXLSXImport/layerGPKG", defaultLayerGPKG)
 
     def clearSettings(self):
         """Delete the settings from global QGIS-Settings"""
         s = QSettings()
         s.remove("OrnithoXLSXImport/fileXLSX")
-        # s.remove("OrnithoXLSXImport/fileGPKG")
+        s.remove("OrnithoXLSXImport/fileGPKG")
         # s.remove("OrnithoXLSXImport/layerGPKG")
