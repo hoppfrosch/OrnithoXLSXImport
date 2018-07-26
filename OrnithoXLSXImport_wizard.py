@@ -203,3 +203,18 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         s.remove("OrnithoXLSXImport/fileXLSX")
         s.remove("OrnithoXLSXImport/fileGPKG")
         s.remove("OrnithoXLSXImport/layerGPKG")
+
+    def nextId(self):
+        """Skip wizardpages if everything is OK"""
+        currId = self.currentId()
+        if currId == 1:
+            if self.validateGPKGFile():
+                return 3
+            else:
+                return 2
+        elif currId == 3:
+            if self.validateLayername():
+                return 5
+            else:
+                return 4
+        return currId+1

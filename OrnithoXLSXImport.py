@@ -34,7 +34,7 @@ from .resources import *
 # Import the code for the Wizard
 from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
 
-__version__ = "0.1.0alpha009"
+__version__ = "0.1.0alpha010"
 
 
 class OrnithoXLSXImport:
