@@ -48,7 +48,7 @@ PY_FILES = \
 
 UI_FILES = OrnithoXLSXImport_dialog_base.ui
 
-EXTRAS = metadata.txt icon.png
+EXTRAS = metadata.txt res/goose.png
 
 EXTRA_DIRS =
 

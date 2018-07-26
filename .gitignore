@@ -2,3 +2,4 @@ help/
 resources.py
 ChangeAuthorToHoppfrosch.sh
 *.gpkg
+TMP/
