@@ -21,17 +21,20 @@
  *                                                                         *
  ***************************************************************************/
 """
+import os.path
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt5.QtGui import QIcon, QPixmap, QShowEvent
-from PyQt5.QtWidgets import QAction, QWizard, QLineEdit
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QAction
 
 # Initialize Qt resources from file resources.py
+
+# pylint: disable=W0614, W0401
 from .resources import *
+# pylint: enable=W0614, W0401
 # Import the code for the Wizard
 from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
-import os.path
 
-__version__ = "0.1.0alpha008"
+__version__ = "0.1.0alpha009"
 
 
 class OrnithoXLSXImport:

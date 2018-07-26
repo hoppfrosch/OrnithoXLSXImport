@@ -21,6 +21,9 @@ persistent=yes
 # usually to register additional checkers.
 load-plugins=
 
+# JoK: Avoid pylint warnings concerning Qt5
+extension-pkg-whitelist=PyQt5
+
 
 [MESSAGES CONTROL]
 
@@ -39,7 +42,7 @@ load-plugins=
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 # see http://stackoverflow.com/questions/21487025/pylint-locally-defined-disables-still-give-warnings-how-to-suppress-them
-disable=locally-disabled,C0103
+disable=locally-disabled,C0103,W0511
 
 
 [REPORTS]

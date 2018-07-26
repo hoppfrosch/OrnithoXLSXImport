@@ -27,9 +27,10 @@ import os
 
 from PyQt5 import uic
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWizard, QWizardPage, QLineEdit, QToolButton, QFileDialog, QComboBox, QLabel
-from PyQt5 import QtGui
-from PyQt5.QtGui import QIcon, QPixmap, QPaintEvent
+from PyQt5.QtWidgets import QWizard, QLineEdit, QToolButton, \
+    QFileDialog, QComboBox, QLabel  # , QWizardPage
+# from PyQt5 import QtGui
+# from PyQt5.QtGui import QPaintEvent, QIcon, QPixmap,
 
 from PyQt5.QtCore import QSettings
 
@@ -38,16 +39,22 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 
 def dump(obj):
+    """Dump object"""
+
     for attr in dir(obj):
         if hasattr(obj, attr):
             print("obj.%s = %s" % (attr, getattr(obj, attr)))
 
 
 class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
+    """Import Wizard"""
+
     def __init__(self, parent=None):
         """Constructor."""
 
         # Read the settings
+        self.fileXLSX = None
+        self.fileGPKG = None
         self.readSettings()
         self.NextButtonEnabled = False
 
@@ -80,13 +87,13 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
 
     def paintEvent(self, event):
         """Event fuer Neuzeichnen des Wizards"""
-        id = self.currentId()
+        pageId = self.currentId()
         # https://python-forum.io/Thread-Disable-Enter-Key-PyQt5-Wizard?pid=51388
-        if id == 0:
+        if pageId == 0:
             self.validateXLSXFile()
-        elif id == 1:
+        elif pageId == 1:
             self.validateGPKGFile()
-        elif id == 3:
+        elif pageId == 3:
             self.validateLayername()
 
         self.button(QWizard.NextButton).setEnabled(self.NextButtonEnabled)
@@ -113,7 +120,8 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         """Select the XLSX-File to be imported"""
 
         filename = QFileDialog.getOpenFileName(
-            None, 'Waehle XLXS-Export Datei aus Ornitho:', self.fileXLSX, "Excel-File (*.xlsx)")
+            None, 'Waehle XLXS-Export Datei aus Ornitho:', self.fileXLSX,
+            "Excel-File (*.xlsx)")
         self.fileXLSX = filename[0]
         if self.fileXLSX == "":
             return
@@ -125,7 +133,8 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         """Select the Geopackage-File to be exported"""
 
         filename = QFileDialog.getSaveFileName(
-            None, 'Waehle zu exportierende Geopackage-Datei:', self.fileGPKG, "Geopackage-File (*.gpkg)")
+            None, 'Waehle zu exportierende Geopackage-Datei:', self.fileGPKG,
+            "Geopackage-File (*.gpkg)")
         self.fileGPKG = filename[0]
         if self.fileGPKG == "":
             return
@@ -141,7 +150,8 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
             if os.path.isfile(self.fileXLSX):
                 self.NextButtonEnabled = True
 
-        # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
+    # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
+
         return False
 
     def validateGPKGFile(self):
@@ -160,7 +170,8 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         """Validierung des ausgewaehlten Layernamens"""
         self.NextButtonEnabled = False
 
-        # Wenn die GPKG-Datei noch nicht existiert, kann der Layername frei gewaehlt werden
+        # Wenn die GPKG-Datei noch nicht existiert, kann der Layername frei
+        # gewaehlt werden
         if not os.path.exists(self.fileGPKG):
             self.NextButtonEnabled = True
 
