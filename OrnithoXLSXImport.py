@@ -31,7 +31,7 @@ from .resources import *
 from .OrnithoXLSXImport_wizard import OrnithoXLSXImportWizard
 import os.path
 
-__version__ = "0.1.0alpha007"
+__version__ = "0.1.0alpha008"
 
 
 class OrnithoXLSXImport:

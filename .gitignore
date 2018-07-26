@@ -1,3 +1,4 @@
 help/
 resources.py
 ChangeAuthorToHoppfrosch.sh
+*.gpkg

@@ -27,7 +27,7 @@ import os
 
 from PyQt5 import uic
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWizard, QWizardPage, QLineEdit, QToolButton, QFileDialog
+from PyQt5.QtWidgets import QWizard, QWizardPage, QLineEdit, QToolButton, QFileDialog, QComboBox, QLabel
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon, QPixmap, QPaintEvent
 
@@ -48,7 +48,6 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         """Constructor."""
 
         # Read the settings
-        self.clearSettings()
         self.readSettings()
         self.NextButtonEnabled = False
 
@@ -69,6 +68,9 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         self.wizardPageGeopackage.findChild(
             QLineEdit, "lineEditGeopackageFile").setText(self.fileGPKG)
 
+        self.wizardPageGeopackage.findChild(
+            QLineEdit, "lineEditGeopackageFile").setText(self.fileGPKG)
+
         # Set up the signals
         tb = self.wizardPageXSLX.findChild(QToolButton, "toolButtonXSLXFile")
         tb.clicked.connect(self.clickedToolButtonXSLXFile)
@@ -84,9 +86,23 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
             self.validateXLSXFile()
         elif id == 1:
             self.validateGPKGFile()
+        elif id == 3:
+            self.validateLayername()
 
         self.button(QWizard.NextButton).setEnabled(self.NextButtonEnabled)
         super(OrnithoXLSXImportWizard, self).paintEvent(event)
+
+    def populateLayerDropdown(self):
+        """Populate the Layer Dropdown with layers from current geopackage"""
+
+        cb = self.wizardPageLayername.findChild(
+            QComboBox, "comboBoxGeopackageLayer")
+        cb.clear()
+        layerList = []
+        layerList.append(os.path.splitext(os.path.basename(self.fileGPKG))[0])
+
+        layerList.sort()
+        cb.addItems(layerList)
 
     def showEvent(self, event):
         """Show-Event"""
@@ -126,7 +142,6 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
                 self.NextButtonEnabled = True
 
         # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
-
         return False
 
     def validateGPKGFile(self):
@@ -135,33 +150,45 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
 
         if not os.path.exists(self.fileGPKG):
             self.NextButtonEnabled = True
+            self.populateLayerDropdown()
+            self.wizardPageLayername.findChild(
+                QLabel, "labelGeopackageFileName").setText(self.fileGPKG)
 
-        # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
+        return self.NextButtonEnabled
 
-        return False
+    def validateLayername(self):
+        """Validierung des ausgewaehlten Layernamens"""
+        self.NextButtonEnabled = False
+
+        # Wenn die GPKG-Datei noch nicht existiert, kann der Layername frei gewaehlt werden
+        if not os.path.exists(self.fileGPKG):
+            self.NextButtonEnabled = True
+
+        return self.NextButtonEnabled
 
     def storeSettings(self):
         """Store the settings into global QGIS-Settings"""
         s = QSettings()
         s.setValue("OrnithoXLSXImport/fileXLSX", self.fileXLSX)
-    #    s.setValue("OrnithoXLSXImport/fileGPKG", self.fileGPKG)
-    #    s.setValue("OrnithoXLSXImport/layerGPKG", self.layerGPKG)
+        s.setValue("OrnithoXLSXImport/fileGPKG", self.fileGPKG)
+        s.setValue("OrnithoXLSXImport/layerGPKG", self.layerGPKG)
 
     def readSettings(self):
         """Restore the settings from global QGIS-Settings"""
         defaultPath = os.path.join(os.path.join(os.path.expanduser('~')))
         defaultXLSX = os.path.join(defaultPath, "export.xlsx")
         defaultGPKG = os.path.join(defaultPath, "ornitho.gpkg")
-    #    defaultLayerGPKG = os.path.splitext(os.path.basename(defaultXLSX))[0]
+        defaultLayerGPKG = os.path.splitext(os.path.basename(defaultXLSX))[0]
 
         s = QSettings()
         self.fileXLSX = s.value("OrnithoXLSXImport/fileXLSX", defaultXLSX)
         self.fileGPKG = s.value("OrnithoXLSXImport/fileGPKG", defaultGPKG)
-    #    self.layerGPKG = s.value("OrnithoXLSXImport/layerGPKG", defaultLayerGPKG)
+        self.layerGPKG = s.value(
+            "OrnithoXLSXImport/layerGPKG", defaultLayerGPKG)
 
     def clearSettings(self):
         """Delete the settings from global QGIS-Settings"""
         s = QSettings()
         s.remove("OrnithoXLSXImport/fileXLSX")
         s.remove("OrnithoXLSXImport/fileGPKG")
-        # s.remove("OrnithoXLSXImport/layerGPKG")
+        s.remove("OrnithoXLSXImport/layerGPKG")
