@@ -55,6 +55,7 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         # Read the settings
         self.fileXLSX = None
         self.fileGPKG = None
+        self.layerGPKG = None
         self.readSettings()
         self.NextButtonEnabled = False
 
@@ -149,6 +150,9 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         if os.path.exists(self.fileXLSX):
             if os.path.isfile(self.fileXLSX):
                 self.NextButtonEnabled = True
+                self.storeSettings()
+                self.wizardPageImport.findChild(
+                    QLabel, "labelXLSXFileName").setText(self.fileXLSX)
 
     # TODO: Ueberpruefen ob XLSX-Inhalt auch tatsaechlich ein Ornitho-Export ist
 
@@ -160,20 +164,28 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
 
         if not os.path.exists(self.fileGPKG):
             self.NextButtonEnabled = True
+            self.storeSettings()
             self.populateLayerDropdown()
             self.wizardPageLayername.findChild(
                 QLabel, "labelGeopackageFileName").setText(self.fileGPKG)
+            self.wizardPageImport.findChild(
+                QLabel, "labelGeopackageFileName_2").setText(self.fileGPKG)
 
         return self.NextButtonEnabled
 
     def validateLayername(self):
         """Validierung des ausgewaehlten Layernamens"""
         self.NextButtonEnabled = False
+        self.layerGPKG = str(self.wizardPageLayername.findChild(
+            QComboBox, "comboBoxGeopackageLayer").currentText())
 
         # Wenn die GPKG-Datei noch nicht existiert, kann der Layername frei
         # gewaehlt werden
         if not os.path.exists(self.fileGPKG):
             self.NextButtonEnabled = True
+            self.storeSettings()
+            self.wizardPageImport.findChild(
+                QLabel, "labelLayerName").setText(self.layerGPKG)
 
         return self.NextButtonEnabled
 
