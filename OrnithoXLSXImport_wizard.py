@@ -163,13 +163,14 @@ class OrnithoXLSXImportWizard(QtWidgets.QWizard, FORM_CLASS):
         self.NextButtonEnabled = False
 
         if not os.path.exists(self.fileGPKG):
-            self.NextButtonEnabled = True
-            self.storeSettings()
-            self.populateLayerDropdown()
-            self.wizardPageLayername.findChild(
-                QLabel, "labelGeopackageFileName").setText(self.fileGPKG)
-            self.wizardPageImport.findChild(
-                QLabel, "labelGeopackageFileName_2").setText(self.fileGPKG)
+            if self.fileGPKG:
+                self.NextButtonEnabled = True
+                self.storeSettings()
+                self.populateLayerDropdown()
+                self.wizardPageLayername.findChild(
+                    QLabel, "labelGeopackageFileName").setText(self.fileGPKG)
+                self.wizardPageImport.findChild(
+                    QLabel, "labelGeopackageFileName_2").setText(self.fileGPKG)
 
         return self.NextButtonEnabled
 
