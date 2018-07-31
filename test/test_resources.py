@@ -17,8 +17,7 @@ import unittest
 from PyQt5.QtGui import QIcon
 
 
-
-class OrnithoXLSXImportDialogTest(unittest.TestCase):
+class OrnithoXLSXImportWizardTest(unittest.TestCase):
     """Test rerources work."""
 
     def setUp(self):
@@ -31,14 +30,12 @@ class OrnithoXLSXImportDialogTest(unittest.TestCase):
 
     def test_icon_png(self):
         """Test we can click OK."""
-        path = ':/plugins/OrnithoXLSXImport/icon.png'
+        path = ':/plugins/OrnithoXLSXImport/res/goose.svg'
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
 
+
 if __name__ == "__main__":
-    suite = unittest.makeSuite(OrnithoXLSXImportResourcesTest)
+    suite = unittest.makeSuite(OrnithoXLSXImportWizardTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
-
-
-

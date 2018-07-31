@@ -14,7 +14,15 @@ __copyright__ = 'Copyright 2018, Johannes Kilian'
 
 import unittest
 
-from Ornitho_Geopackage import OrnithoGeopackage
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+from OrnithoGeopackage import OrnithoGeopackage
 
 
 class OrnithoGeopackageTest(unittest.TestCase):
@@ -36,12 +44,17 @@ class OrnithoGeopackageTest(unittest.TestCase):
         self.assertEqual(layercount, 1)
 
     def test_layername(self):
-        """Test layernamet."""
+        """Test layername."""
         layerlist = self.gpkg.layerList()
         res = False
         if 'ornitho' in layerlist:
             res = True
         self.assertEqual(res, True)
+
+    def test_layerexists(self):
+        """Test whether layer exists."""
+        layerexists = self.gpkg.layerExists("ornitho")
+        self.assertEqual(layerexists, True)
 
 
 if __name__ == "__main__":

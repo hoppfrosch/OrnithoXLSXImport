@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+
 import sys
 import os
 import collections
@@ -6,7 +9,15 @@ from osgeo import gdal
 from osgeo import ogr
 from osgeo import osr
 
-__version__ = "0.1.0alpha1"
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+from OrnithoXLSXColumnDefinition import OrnithoXLSXColumnDefinition
+
+__version__ = "0.1.0alpha02"
 
 
 class OrnithoGeopackage:
@@ -45,6 +56,13 @@ class OrnithoGeopackage:
         layerCount = self.dataSource.GetLayerCount()
         return layerCount
 
+    def layerExists(self, layername):
+        """Checks whether a layer given by name exists"""
+        layerList = self.layerList()
+        if layername:
+            if layername in layerList:
+                return True
+
     def layerList(self):
         """Get names of all layers in current geopackage"""
         layerList = []
@@ -58,12 +76,3 @@ class OrnithoGeopackage:
 
         layerList.sort()
         return layerList
-
-#################################################################################################################
-
-
-test = OrnithoGeopackage(
-    "w:\Develop\OrnithoXLSXmporter\Data\jok_test_new2.gpkg")
-
-layerList = test.layerList()
-print(layerList)

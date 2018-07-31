@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from .utilities import get_qgis_app
+from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
@@ -46,6 +46,7 @@ class QGISTest(unittest.TestCase):
             '0.0174532925199433]]')
         crs.createFromWkt(wkt)
         auth_id = crs.authid()
+        print(auth_id)
         expected_auth_id = 'EPSG:4326'
         self.assertEqual(auth_id, expected_auth_id)
 
@@ -55,6 +56,7 @@ class QGISTest(unittest.TestCase):
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()
         self.assertEqual(auth_id, expected_auth_id)
+
 
 if __name__ == '__main__':
     unittest.main()

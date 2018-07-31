@@ -3,3 +3,5 @@ resources.py
 ChangeAuthorToHoppfrosch.sh
 *.gpkg
 TMP/
+__pycache__/
+Examples/
