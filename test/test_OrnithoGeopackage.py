@@ -44,7 +44,6 @@ class OrnithoGeopackageTest(unittest.TestCase):
 
     def tearDown(self):
         """Runs after each test."""
-
         pass
 
     def test_layercount(self):

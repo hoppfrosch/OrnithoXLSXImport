@@ -69,7 +69,8 @@ class OrnithoGeopackage:
         test = OrnithoXLSXColumnDefinition(filename)
 
         for i, (key, value) in enumerate(test.columns.items()):
-            print(i, key, value)
+            self.layer.CreateField(ogr.FieldDefn(
+                key, self.string2Datatype(value[1])))
 
     def layerCount(self):
         """get the count of layers within gpkg"""
@@ -96,3 +97,17 @@ class OrnithoGeopackage:
 
         layerList.sort()
         return layerList
+
+    def string2Datatype(self, str):
+        if str == 'str':
+            return ogr.OFTString
+        elif str == 'int':
+            return ogr.OFTInteger
+        elif str == 'datetime':
+            return ogr.OFTDateTime
+        elif str == 'float':
+            return ogr.OFTReal
+        elif str == 'time':
+            return ogr.OFTTime
+
+        return
