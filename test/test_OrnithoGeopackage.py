@@ -9,7 +9,7 @@
 """
 
 __author__ = 'hoppfrosch@gmx.de'
-__date__ = '2018-07-19'
+__date__ = '2018-08-01'
 __copyright__ = 'Copyright 2018, Johannes Kilian'
 
 import unittest
@@ -26,16 +26,25 @@ from OrnithoGeopackage import OrnithoGeopackage
 
 
 class OrnithoGeopackageTest(unittest.TestCase):
-    """Test rerources work."""
+    """Test OrnithoGeopackage work."""
+
+    def pathData(self):
+        return "w:/Develop/OrnithoXLSXImport/data"
+
+    def pathOut(self):
+        return self.pathData() + "/tmp/" + self.__class__.__name__
 
     def setUp(self):
         """Runs before each test."""
+        if not os.path.exists(self.pathOut()):
+            os.makedirs(self.pathOut())
         self.gpkg = OrnithoGeopackage(
-            "w:\Develop\OrnithoXLSXmporter\Data\jok_test_new2.gpkg")
+            pathGPKG=self.pathData() + "/Example_constant.gpkg")
         pass
 
     def tearDown(self):
         """Runs after each test."""
+
         pass
 
     def test_layercount(self):
@@ -47,14 +56,22 @@ class OrnithoGeopackageTest(unittest.TestCase):
         """Test layername."""
         layerlist = self.gpkg.layerList()
         res = False
-        if 'ornitho' in layerlist:
+        if 'export_20180514_145320' in layerlist:
             res = True
         self.assertEqual(res, True)
 
     def test_layerexists(self):
         """Test whether layer exists."""
-        layerexists = self.gpkg.layerExists("ornitho")
+        layerexists = self.gpkg.layerExists("export_20180514_145320")
         self.assertEqual(layerexists, True)
+
+    def test_XLSX(self):
+        """Test XSLX."""
+        gpkg = OrnithoGeopackage(
+            pathGPKG=self.pathOut()+"/XLSX_import.gpkg", overwrite=1)
+        test = gpkg.createFromXLSX(
+            self.pathData()+"/export_20180514_145320.xlsx")
+        self.assertEqual(False, True)
 
 
 if __name__ == "__main__":

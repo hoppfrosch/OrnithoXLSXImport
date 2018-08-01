@@ -39,17 +39,37 @@ class OrnithoGeopackage:
 
         self.driver = ogr.GetDriverByName('GPKG')
 
-        if (os.path.exists(pathGPKG)):
-            if (os.path.isfile(pathGPKG)):
-                if (overwrite):
-                    self.driver.DeleteDataSource(file)
-                    self.dataSource = self.driver.CreateDataSource(file)
-                else:
-                    self.dataSource = self.driver.Open(file, 1)
-            else:
+        if (os.path.isfile(pathGPKG)):
+            if (overwrite):
+                self.driver.DeleteDataSource(file)
                 self.dataSource = self.driver.CreateDataSource(file)
+            else:
+                self.dataSource = self.driver.Open(file, 1)
+        else:
+            self.dataSource = self.driver.CreateDataSource(file)
 
         os.chdir(cwd)
+
+    def __del__(self):
+        self.dataSource.Destroy()
+        return
+
+    def createFromXLSX(self, filename, layer=None):
+        if not os.path.exists(filename):
+            return
+        if not os.path.isfile(filename):
+            return
+        if not layer:
+            layer = os.path.basename(filename)
+            layer = os.path.splitext(layer)[0]
+
+        self.layer = self.dataSource.CreateLayer(
+            layer, self.srs, geom_type=ogr.wkbPoint)
+
+        test = OrnithoXLSXColumnDefinition(filename)
+
+        for i, (key, value) in enumerate(test.columns.items()):
+            print(i, key, value)
 
     def layerCount(self):
         """get the count of layers within gpkg"""

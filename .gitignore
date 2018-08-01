@@ -5,3 +5,4 @@ ChangeAuthorToHoppfrosch.sh
 TMP/
 __pycache__/
 Examples/
+Ornitho_Geopackage_ori.py
