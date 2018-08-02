@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- OrnithoXLSXImportDialog
+ OrnithoXLSXColumnDefinition
 
  Analysiert XLXS-Datei  - ob sie ein Ornitho.de Export ist
  http://zetcode.com/articles/openpyxl/
@@ -70,6 +70,6 @@ class OrnithoXLSXColumnDefinition:
                 self.columns[name] = (col, typ, descr)
 
 
-test = OrnithoXLSXColumnDefinition(
-    "w:/Develop/OrnithoXLSXImport/data/export_20180514_145320.xlsx")
-print(test.columns)
+# test = OrnithoXLSXColumnDefinition(
+#    "w:/Develop/OrnithoXLSXImport/data/export_20180514_145320.xlsx")
+# print(test.columns)

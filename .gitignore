@@ -3,3 +3,6 @@ resources.py
 ChangeAuthorToHoppfrosch.sh
 *.gpkg
 TMP/
+__pycache__/
+Examples/
+Ornitho_Geopackage_ori.py
