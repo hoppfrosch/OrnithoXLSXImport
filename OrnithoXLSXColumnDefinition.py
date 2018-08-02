@@ -29,7 +29,7 @@ from openpyxl import *
 from openpyxl.utils import *
 # pylint: enable=W0614, W0401
 
-__version__ = "0.1.0alpha1"
+__version__ = "0.1.0alpha02"
 
 
 class OrnithoXLSXColumnDefinition:
@@ -51,11 +51,12 @@ class OrnithoXLSXColumnDefinition:
             raise FileNotFoundError(
                 "Eingabepfad <"+pathXLSX+"> ist keine Datei")
 
-        book = load_workbook(pathXLSX)
-        self.sheet = book["Export"]
+        self.book = load_workbook(pathXLSX)
+        self.sheet = self.book["Export"]
         column_count = self.sheet.max_column
 
         self.columns = {}
+        self.col = {}
         # Parsen des Sheets um die Zuordnung
         # Spaltennummer - Spaltennamen - Datentyp zu ermitteln.
         for col in self.sheet.iter_cols(min_row=1, max_row=1,
@@ -68,6 +69,10 @@ class OrnithoXLSXColumnDefinition:
                 # Hole einen Beispielwert aus der 3.Reihe der aktuellen Spalte
                 typ = self.sheet[col + "3"].internal_value.__class__.__name__
                 self.columns[name] = (col, typ, descr)
+                self.col[col] = name
+
+    def col2columnName(self, index):
+        return self.col[get_column_letter(index)]
 
 
 # test = OrnithoXLSXColumnDefinition(

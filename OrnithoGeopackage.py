@@ -66,11 +66,42 @@ class OrnithoGeopackage:
         self.layer = self.dataSource.CreateLayer(
             layer, self.srs, geom_type=ogr.wkbPoint)
 
-        test = OrnithoXLSXColumnDefinition(filename)
+        self.XLSX = OrnithoXLSXColumnDefinition(filename)
 
-        for i, (key, value) in enumerate(test.columns.items()):
+        for i, (key, value) in enumerate(self.XLSX.columns.items()):
             self.layer.CreateField(ogr.FieldDefn(
                 key, self.string2Datatype(value[1])))
+
+    def importDataFromXLSX(self):
+        currRow = 0
+        xName = "COORD_LON"
+        yName = "COORD_LAT"
+        x = None
+        y = None
+
+        for row in self.XLSX.sheet.iter_rows():
+            if currRow > 1:
+                feat = ogr.Feature(self.layer.GetLayerDefn())
+                currCol = 1
+                for cell in row:
+                    # Fill in the table attributes
+                    colName = self.XLSX.col2columnName(currCol)
+                    feat[colName] = cell.value
+                    # Get the point coordinates from certain columns
+                    if (colName == xName):
+                        x = cell.value
+                    elif (colName == yName):
+                        y = cell.value
+                    currCol = currCol + 1
+
+                if (x and y):
+                    print(x, y)
+                    # Create the geometry data
+                    wkt = "POINT(%f %f)" % (x, y)
+                    feat.SetGeometry(ogr.CreateGeometryFromWkt(wkt))
+                # create the attributes in table
+                self.layer.CreateFeature(feat)
+            currRow = currRow+1
 
     def layerCount(self):
         """get the count of layers within gpkg"""

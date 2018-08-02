@@ -70,6 +70,7 @@ class OrnithoGeopackageTest(unittest.TestCase):
             pathGPKG=self.pathOut()+"/XLSX_import.gpkg", overwrite=1)
         test = gpkg.createFromXLSX(
             self.pathData()+"/export_20180514_145320.xlsx")
+        gpkg.importDataFromXLSX()
         self.assertEqual(False, True)
 
 
